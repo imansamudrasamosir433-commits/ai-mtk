@@ -1,0 +1,391 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>AI Matematika Teknik — GitHub Pages</title>
+  <style>
+    :root {
+      --bg: #080f1d;
+      --card: #0f192e;
+      --card2: #0a1222;
+      --line: #213252;
+      --tx: #e6edf7;
+      --mut: #8da2c2;
+      --c: #22d3ee;
+      --g: #34d399;
+      --a: #fbbf24;
+      --r: #f87171;
+      --p: #a78bfa;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      min-height: 100vh;
+      background: radial-gradient(circle at 15% 10%, #13284b 0%, var(--bg) 55%);
+      color: var(--tx);
+      font: 15px/1.6 system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
+    }
+    .wrap {
+      max-width: 920px;
+      margin: 0 auto;
+      padding: 20px 14px 60px;
+    }
+    h1 {
+      margin: 0 0 4px;
+      font-size: 1.45rem;
+      background: linear-gradient(90deg, var(--c), var(--g), var(--p));
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+    }
+    .sub {
+      margin: 0 0 14px;
+      color: var(--mut);
+      font-size: 0.88rem;
+    }
+    .card {
+      background: var(--card);
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      padding: 14px;
+      margin-bottom: 12px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.25);
+    }
+    .row {
+      display: grid;
+      grid-template-columns: 1fr auto auto;
+      gap: 8px;
+      align-items: center;
+    }
+    @media (max-width: 640px) {
+      .row { grid-template-columns: 1fr; }
+    }
+    label {
+      display: block;
+      font-size: 0.78rem;
+      color: var(--mut);
+      margin-bottom: 5px;
+    }
+    input[type="password"], input[type="text"], select, textarea {
+      width: 100%;
+      background: var(--card2);
+      color: var(--tx);
+      border: 1px solid var(--line);
+      border-radius: 9px;
+      padding: 10px 12px;
+      font: inherit;
+    }
+    input:focus, select:focus, textarea:focus {
+      outline: 2px solid var(--c);
+      border-color: transparent;
+    }
+    textarea {
+      min-height: 110px;
+      resize: vertical;
+      font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+      font-size: 0.92rem;
+    }
+    .chips {
+      display: flex;
+      gap: 7px;
+      flex-wrap: wrap;
+      margin-bottom: 10px;
+    }
+    .chip {
+      background: var(--card2);
+      color: var(--mut);
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      padding: 5px 12px;
+      font-size: 0.8rem;
+      cursor: pointer;
+      transition: 0.15s;
+    }
+    .chip:hover, .chip.on {
+      background: var(--c);
+      color: #041d26;
+      border-color: var(--c);
+      font-weight: 600;
+    }
+    .actions {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      align-items: center;
+      margin-top: 10px;
+    }
+    button {
+      border: 0;
+      border-radius: 9px;
+      padding: 10px 16px;
+      font: inherit;
+      font-weight: 600;
+      cursor: pointer;
+      transition: 0.15s;
+    }
+    button:hover { filter: brightness(1.07); }
+    button:disabled { opacity: 0.55; cursor: not-allowed; }
+    .btn-go { background: var(--g); color: #052b1d; }
+    .btn-sec { background: #1a2844; color: var(--tx); border: 1px solid var(--line); }
+    .btn-warn { background: var(--a); color: #362400; }
+    .status {
+      font-size: 0.82rem;
+      color: var(--mut);
+      margin-top: 6px;
+    }
+    .err {
+      color: var(--r);
+      font-size: 0.88rem;
+      margin-top: 8px;
+      white-space: pre-line;
+    }
+    .preview-img {
+      max-height: 160px;
+      border-radius: 8px;
+      border: 1px solid var(--line);
+      margin-top: 8px;
+      display: none;
+    }
+    .ans-box {
+      background: var(--card2);
+      border: 1px solid var(--line);
+      border-left: 4px solid var(--c);
+      border-radius: 12px;
+      padding: 16px;
+      white-space: pre-wrap;
+      word-break: break-word;
+      font-size: 0.94rem;
+    }
+    .hint {
+      font-size: 0.78rem;
+      color: var(--mut);
+      margin-top: 6px;
+    }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <h1>⚡ AI Khusus Matematika Teknik</h1>
+    <p class="sub">Asisten langkah-demi-langkah untuk Pecahan Parsial, Kalkulus, ODE, Laplace/Fourier, Matriks &amp; Aljabar Teknik (GitHub Pages).</p>
+
+    <div class="card">
+      <label for="apiKey">Gemini API Key (disimpan lokal di <code>localStorage</code> browser — tidak masuk ke repo GitHub)</label>
+      <div class="row">
+        <input id="apiKey" type="password" placeholder="Tempel Gemini API Key di sini..." autocomplete="off" />
+        <select id="modelSel" title="Pilih Model">
+          <option value="gemini-2.5-flash">gemini-2.5-flash</option>
+          <option value="gemini-2.5-pro">gemini-2.5-pro</option>
+        </select>
+        <button class="btn-sec" id="btnSaveKey" type="button">Simpan Key</button>
+      </div>
+      <div class="status" id="keyStatus">Status key: belum tersimpan.</div>
+    </div>
+
+    <div class="card">
+      <div class="chips" id="topicChips"></div>
+
+      <label for="soalInput">Masukkan soal mentah dari buku / catatan</label>
+      <textarea id="soalInput" placeholder="Contoh Pecahan Parsial:&#10;(x - 14) / (x^2 - 10x + 24)&#10;&#10;Atau soal cerita/persamaan lain..."></textarea>
+
+      <div class="actions">
+        <button class="btn-go" id="btnSolve" type="button">Kerjakan Langkah Demi Langkah</button>
+        <button class="btn-warn" id="btnSample" type="button">Isi Contoh Soal</button>
+        <label class="btn-sec" style="margin:0;cursor:pointer;padding:10px 14px;">
+          📷 Foto Soal
+          <input id="imgInput" type="file" accept="image/*" style="display:none;" />
+        </label>
+        <button class="btn-sec" id="btnClear" type="button">Bersihkan</button>
+      </div>
+
+      <img id="imgPreview" class="preview-img" alt="Preview soal" />
+      <div class="hint">Tekan <strong>Ctrl + Enter</strong> (atau <strong>Cmd + Enter</strong>) di kotak soal untuk langsung mengirim.</div>
+      <div class="err" id="errBox"></div>
+    </div>
+
+    <div class="card" id="resultCard" style="display:none;">
+      <label>Jawaban &amp; Jalan Pengerjaan</label>
+      <div class="ans-box" id="ansBox"></div>
+    </div>
+  </div>
+
+  <script>
+    const SYSTEM_PROMPT = `Kamu adalah asisten AI khusus Matematika Teknik untuk mahasiswa teknik.
+Tugasmu menyelesaikan soal matematika teknik (pecahan parsial, aljabar polinomial, kalkulus, persamaan diferensial biasa/parsial, transformasi Laplace & Fourier, matriks/aljabar linear, serta metode numerik) secara akurat dan runtut.
+
+Aturan jawaban:
+1. Identifikasi jenis soal & bentuk awalnya (termasuk cek derajat pembilang/penyebut, pemfaktoran, atau kondisi batas).
+2. Sebutkan rumus atau metode yang digunakan.
+3. Jabarkan langkah penyelesaian secara bertahap dan jelas tanpa melompati tahap penting.
+4. Tampilkan hasil akhir dengan jelas (misalnya nilai koefisien A, B, C... dan bentuk uraian akhirnya) serta sertakan pengecekan singkat.
+5. Jika penulisan soal mentah ambigu, sebutkan asumsi yang dipakai secara singkat dan jujur.`;
+
+    const TOPICS = [
+      {
+        name: "Pecahan Parsial Mentah",
+        prompt: "Uraikan menjadi pecahan parsial dan tentukan nilai koefisien A, B, C, ... beserta jalannya:\n(x - 14) / (x^2 - 10x + 24)"
+      },
+      {
+        name: "Pecahan Parsial Pangkat 3",
+        prompt: "Selesaikan pecahan parsial berikut lengkap dengan pemfaktoran penyebut dan nilai koefisiennya:\n(8x^2 + 27x + 13) / (x^3 + 4x^2 + x - 6)"
+      },
+      {
+        name: "ODE Orde-2",
+        prompt: "Selesaikan persamaan diferensial berikut langkah demi langkah:\n2x'' + 4x' + 50x = 0, dengan x(0) = 0.1 dan x'(0) = 0"
+      },
+      {
+        name: "Laplace & Invers",
+        prompt: "Tentukan transformasi Laplace atau invers Laplace berikut dengan langkah jelas:\nL^-1 { (3s + 7) / ((s + 1)(s + 2)) }"
+      },
+      {
+        name: "Matriks & SPL",
+        prompt: "Hitung determinan, invers (jika ada), atau solusi sistem persamaan linear berikut:\n2x + y - z = 8\n-3x - y + 2z = -11\n-2x + y + 2z = -3"
+      }
+    ];
+
+    const $ = (s) => document.querySelector(s);
+    const STORAGE_KEY = "eng_math_ai_gemini_key_v1";
+    let attachedImage = null;
+
+    function initTopics() {
+      const wrap = $("#topicChips");
+      wrap.innerHTML = TOPICS.map((t, idx) =>
+        `<button type="button" class="chip${idx === 0 ? " on" : ""}" data-idx="${idx}">${t.name}</button>`
+      ).join("");
+      wrap.addEventListener("click", (e) => {
+        const btn = e.target.closest(".chip");
+        if (!btn) return;
+        wrap.querySelectorAll(".chip").forEach((c) => c.classList.remove("on"));
+        btn.classList.add("on");
+        const item = TOPICS[+btn.dataset.idx];
+        $("#soalInput").value = item.prompt;
+        $("#errBox").textContent = "";
+      });
+    }
+
+    function loadSavedKey() {
+      const saved = localStorage.getItem(STORAGE_KEY) || "";
+      if (saved) {
+        $("#apiKey").value = saved;
+        $("#keyStatus").textContent = "Status key: tersimpan di localStorage browser ini.";
+      }
+    }
+
+    $("#btnSaveKey").addEventListener("click", () => {
+      const k = $("#apiKey").value.trim();
+      if (!k) {
+        localStorage.removeItem(STORAGE_KEY);
+        $("#keyStatus").textContent = "Status key: dihapus.";
+        return;
+      }
+      localStorage.setItem(STORAGE_KEY, k);
+      $("#keyStatus").textContent = "Status key: tersimpan di localStorage browser ini.";
+    });
+
+    $("#btnSample").addEventListener("click", () => {
+      const active = $("#topicChips .chip.on");
+      const idx = active ? +active.dataset.idx : 0;
+      $("#soalInput").value = TOPICS[idx].prompt;
+      $("#errBox").textContent = "";
+    });
+
+    $("#imgInput").addEventListener("change", (e) => {
+      const file = e.target.files && e.target.files[0];
+      if (!file) return;
+      const reader = new FileReader();
+      reader.onload = () => {
+        const base64 = String(reader.result).split(",")[1];
+        attachedImage = { mimeType: file.type || "image/jpeg", data: base64 };
+        const prev = $("#imgPreview");
+        prev.src = reader.result;
+        prev.style.display = "block";
+      };
+      reader.readAsDataURL(file);
+    });
+
+    $("#btnClear").addEventListener("click", () => {
+      $("#soalInput").value = "";
+      $("#errBox").textContent = "";
+      $("#resultCard").style.display = "none";
+      $("#ansBox").textContent = "";
+      $("#imgInput").value = "";
+      attachedImage = null;
+      const prev = $("#imgPreview");
+      prev.src = "";
+      prev.style.display = "none";
+    });
+
+    async function solveQuestion() {
+      $("#errBox").textContent = "";
+      const apiKey = ($("#apiKey").value || localStorage.getItem(STORAGE_KEY) || "").trim();
+      const model = $("#modelSel").value;
+      const question = $("#soalInput").value.trim();
+
+      if (!apiKey) {
+        $("#errBox").textContent = "Masukkan Gemini API Key terlebih dahulu (lalu klik Simpan Key).";
+        return;
+      }
+      if (!question && !attachedImage) {
+        $("#errBox").textContent = "Ketik soal matematika teknik atau unggah foto soal terlebih dahulu.";
+        return;
+      }
+
+      const parts = [];
+      if (question) parts.push({ text: question });
+      if (attachedImage) {
+        parts.push({
+          inline_data: {
+            mime_type: attachedImage.mimeType,
+            data: attachedImage.data
+          }
+        });
+      }
+
+      const btn = $("#btnSolve");
+      btn.disabled = true;
+      btn.textContent = "Sedang menghitung...";
+      $("#resultCard").style.display = "block";
+      $("#ansBox").textContent = "Memproses langkah penyelesaian...";
+
+      try {
+        const url = `https://generativelanguage.googleapis.com/v1beta/models/${encodeURIComponent(model)}:generateContent?key=${encodeURIComponent(apiKey)}`;
+        const res = await fetch(url, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            systemInstruction: { parts: [{ text: SYSTEM_PROMPT }] },
+            contents: [{ role: "user", parts }]
+          })
+        });
+
+        const data = await res.json();
+        if (!res.ok) {
+          throw new Error(data?.error?.message || `HTTP ${res.status}`);
+        }
+
+        const text = (data?.candidates?.[0]?.content?.parts || [])
+          .map((p) => p.text || "")
+          .join("")
+          .trim();
+
+        $("#ansBox").textContent = text || "Tidak ada teks jawaban yang dikembalikan.";
+      } catch (err) {
+        $("#resultCard").style.display = "none";
+        $("#errBox").textContent = "Gagal memanggil AI: " + err.message;
+      } finally {
+        btn.disabled = false;
+        btn.textContent = "Kerjakan Langkah Demi Langkah";
+      }
+    }
+
+    $("#btnSolve").addEventListener("click", solveQuestion);
+    $("#soalInput").addEventListener("keydown", (e) => {
+      if ((e.ctrlKey || e.metaKey) && e.key === "Enter") solveQuestion();
+    });
+
+    initTopics();
+    loadSavedKey();
+    $("#soalInput").value = TOPICS[0].prompt;
+  </script>
+</body>
+</html>
